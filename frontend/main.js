@@ -65,7 +65,7 @@ if (document.getElementById("task-list")) {
             const li = document.createElement("li");
             li.innerHTML = `
             <span class="${task.completada ? "completed" : ""}">${task.titulo}</span>
-            <button data-id="${task.id}" class="edit">Editar</button>
+            <button data-id="${task.id}" class="edit" style="margin-right: 8px; margin-left: 8px;">Editar</button>
             <button data-id="${task.id}" class="delete">Eliminar</button>
         `;
             taskList.appendChild(li);
