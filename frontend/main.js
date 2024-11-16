@@ -1,4 +1,4 @@
-const API_URL = "https://tasks-manager-js.onrender.com/";
+const API_URL = "https://tasks-manager-js.onrender.com/api";
 
 if (document.getElementById("register-form")) {
     document.getElementById("register-form").addEventListener("submit", async (e) => {
