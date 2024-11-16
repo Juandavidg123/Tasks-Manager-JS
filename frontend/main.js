@@ -1,4 +1,4 @@
-const API_URL = "http://localhost:5000/api";
+const API_URL = "http://localhost:3000/api";
 
 if (document.getElementById("register-form")) {
     document.getElementById("register-form").addEventListener("submit", async (e) => {
