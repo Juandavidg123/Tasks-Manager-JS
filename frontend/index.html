@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestor de Tareas</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1>Gestor de Tareas</h1>
+        <button id="logout">Cerrar Sesión</button>
+    </header>
+    <main>
+        <section id="task-form">
+            <input type="text" id="task-title" placeholder="Título de la tarea">
+            <textarea id="task-desc" placeholder="Descripción de la tarea"></textarea>
+            <button id="add-task">Agregar Tarea</button>
+            <input type="hidden" id="task-id">
+            <button id="update-task" style="display: none;">Actualizar Tarea</button>
+        </section>
+
+        <section id="task-list">
+            <h2>Tus Tareas</h2>
+            <ul id="tasks"></ul>
+        </section>
+    </main>
+    <script src="main.js"></script>
+</body>
+</html>

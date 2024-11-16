@@ -1,0 +1,20 @@
+# Databases
+*.mysql
+*.sql
+
+# Environment
+.env
+*.env
+
+# Logs
+*.log
+*.log.*
+
+# Cache
+*.cache
+*.cache.*
+
+# Dependencies
+node_modules
+vendor
+
