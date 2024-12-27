@@ -1,4 +1,4 @@
-const mysql = require('mysql2');
+const postgres = require('postgres');
 const path = require('path');
 const dotenv = require('dotenv');
 
@@ -9,15 +9,13 @@ const createConnection = () => {
         throw new Error('DB_URL no está definida en el archivo .env');
     }
 
-    const connection = mysql.createConnection(process.env.DB_URL);
-
-    connection.connect((err) => {
-        if (err) {
-            console.error('Error al conectar a la base de datos:', err);
-            process.exit(1);
-        }
-        console.log('Conexión exitosa a la base de datos');
-    });
+    const connection = postgres(process.env.DB_URL);
+    if (!connection) {
+        throw new Error('No se pudo conectar a la base de datos');
+    }
+    else {
+        console.log('Conexión a la base de datos establecida');
+    }
 
     return connection;
 };
