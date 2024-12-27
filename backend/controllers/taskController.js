@@ -1,65 +1,84 @@
 const db = require('../config/db');
 
-exports.getTasks = (req, res) => {
+exports.getTasks = async (req, res) => {
     const userId = req.userId;
 
-    db.query(
-        'SELECT * FROM tareas WHERE usuario_id = ?',
-        [userId],
-        (err, results) => {
-            if (err) return res.status(500).json({ error: err.message });
-            res.status(200).json(results);
-        }
-    );
+    try {
+        const tasks = await db`
+            SELECT * FROM tareas 
+            WHERE usuario_id = ${userId}
+        `;
+
+        res.status(200).json(tasks);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
 };
 
-exports.getTaskById = (req, res) => {
+exports.getTaskById = async (req, res) => {
     const { id } = req.params;
 
-    db.query(
-        'SELECT * FROM tareas WHERE id = ?',
-        [id],
-        (err, results) => {
-            if (err) return res.status(500).json({ error: err.message });
-            if (results.length === 0) return res.status(404).json({ message: 'Tarea no encontrada' });
-            res.status(200).json(results[0]);
+    try {
+        const task = await db`
+            SELECT * FROM tareas 
+            WHERE id = ${id}
+        `;
+
+        if (task.length === 0) {
+            return res.status(404).json({ message: 'Tarea no encontrada' });
         }
-    );
+
+        res.status(200).json(task[0]);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
 };
 
-exports.createTask = (req, res) => {
+exports.createTask = async (req, res) => {
     const { titulo, descripcion } = req.body;
     const userId = req.userId;
 
-    db.query(
-        'INSERT INTO tareas (titulo, descripcion, usuario_id) VALUES (?, ?, ?)',
-        [titulo, descripcion, userId],
-        (err, result) => {
-            if (err) return res.status(500).json({ error: err.message });
-            res.status(201).json({ message: 'Tarea creada', taskId: result.insertId });
-        }
-    );
+    try {
+        const result = await db`
+            INSERT INTO tareas (titulo, descripcion, usuario_id) 
+            VALUES (${titulo}, ${descripcion}, ${userId}) 
+            RETURNING id
+        `;
+
+        res.status(201).json({ message: 'Tarea creada', taskId: result[0].id });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
 };
 
-exports.updateTask = (req, res) => {
+exports.updateTask = async (req, res) => {
     const { id } = req.params;
     const { titulo, descripcion, completada } = req.body;
 
-    db.query(
-        'UPDATE tareas SET titulo = ?, descripcion = ?, completada = ? WHERE id = ?',
-        [titulo, descripcion, completada, id],
-        (err) => {
-            if (err) return res.status(500).json({ error: err.message });
-            res.status(200).json({ message: 'Tarea actualizada' });
-        }
-    );
+    try {
+        await db`
+            UPDATE tareas 
+            SET titulo = ${titulo}, descripcion = ${descripcion}, completada = ${completada} 
+            WHERE id = ${id}
+        `;
+
+        res.status(200).json({ message: 'Tarea actualizada' });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
 };
 
-exports.deleteTask = (req, res) => {
+exports.deleteTask = async (req, res) => {
     const { id } = req.params;
 
-    db.query('DELETE FROM tareas WHERE id = ?', [id], (err) => {
-        if (err) return res.status(500).json({ error: err.message });
+    try {
+        await db`
+            DELETE FROM tareas 
+            WHERE id = ${id}
+        `;
+
         res.status(200).json({ message: 'Tarea eliminada' });
-    });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
 };
